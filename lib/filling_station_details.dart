@@ -1,542 +1,360 @@
+import 'package:flutter/material.dart';
 import 'package:cng_users/filling_station_booking.dart';
 import 'package:cng_users/home_screen.dart';
-import 'package:cng_users/screens/profile_screen.dart';
-import 'package:flutter/material.dart';
 
-class FillingStationDetails extends StatelessWidget {
+class FillingStationDetails extends StatefulWidget {
   const FillingStationDetails({super.key});
+
+  @override
+  State<FillingStationDetails> createState() => _FillingStationDetailsState();
+}
+
+class _FillingStationDetailsState extends State<FillingStationDetails> {
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _scrollOffset = _scrollController.offset;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildReviewCard(String name, String date) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF00A36C),
+                      Color(0xFF00A36C).withOpacity(0.7)
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Center(
+                  child: Text(
+                    name[0],
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Icon(Icons.star, color: Colors.amber, size: 16),
+                        Icon(Icons.star, color: Colors.amber, size: 16),
+                        Icon(Icons.star, color: Colors.amber, size: 16),
+                        Icon(Icons.star, color: Colors.amber, size: 16),
+                        Icon(Icons.star_border, color: Colors.amber, size: 16),
+                        SizedBox(width: 8),
+                        Text(
+                          date,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12),
+          Text(
+            'This fuel station is great! The customer service was excellent. I feel like going there again to fuel my vehicle. Highly recommended place!',
+            style: TextStyle(
+              color: Colors.grey[700],
+              height: 1.5,
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              alignment: Alignment.centerLeft,
+            ),
+            child: Text(
+              'Edit Review',
+              style: TextStyle(
+                color: Color(0xFF00A36C),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        scrollDirection: Axis.vertical,
+      body: Stack(
         children: [
-          Stack(
-            children: [
-              Image.network(
-                  'https://thumbs.dreamstime.com/b/new-delhi-india-petrol-diesel-being-filled-car-indian-oil-pump-to-get-tank-full-pollution-checking-centers-puc-193287003.jpg'),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color(0xFF00A36C),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Icon(
-                        Icons.navigate_before,
-                        size: 35,
-                        color: Colors.white,
+          CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 300,
+                pinned: true,
+                backgroundColor: Colors.white,
+                elevation: _scrollOffset > 200 ? 2 : 0,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        'https://thumbs.dreamstime.com/b/new-delhi-india-petrol-diesel-being-filled-car-indian-oil-pump-to-get-tank-full-pollution-checking-centers-puc-193287003.jpg',
+                        fit: BoxFit.cover,
                       ),
-                    ),
-                    Spacer(),
-                    Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                          color: Color(0xFF00A36C),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Icon(
-                        Icons.favorite_border,
-                        size: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                          color: Color(0xFF00A36C),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: Icon(
-                        Icons.report_gmailerrorred,
-                        size: 25,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              children: [
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Freedom Fuel Filling Station,Kannur',
-                      style: TextStyle(fontSize: 25),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Kannur,Kerala,Kannur',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                SizedBox(
-                  height: 25,
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Description: A fuel station is a facility where vehicles can refuel, typically offering gasoline, diesel, or electric charging stations. It usually includes pumps, a payment kiosk, and sometimes additional services \like a convenience store or car wash. Fuel stations are commonly located along highways, urban roads, or near rest areas, providing a convenient stop for drivers to fill up their tanks.',
-                      style: TextStyle(),
-                    )),
-                SizedBox(
-                  height: 20,
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Your Review',
-                      style: TextStyle(fontSize: 20),
-                    )),
-                SizedBox(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                    child: Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.black26,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(90))),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withOpacity(0.4),
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.4),
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Column(children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Lucy Guest',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                '★★★★☆   9/4/2024',
-                                style: TextStyle(color: Colors.black54),
-                              )),
-                        ])
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xFF00A36C),
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
                 ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'This fuel station is great, The customer service wasgood, I feel like going there again to fuel my vehicle ifpossible, Highly recommending place, I don’t know why it has so low rating.',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Your Review ?',
-                          style: TextStyle(color: Color(0xFF00A36C)),
-                        ))),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Rating and Reviews',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                actions: [
+                  CircleAvatar(
+                    backgroundColor: Color(0xFF00A36C),
+                    child: IconButton(
+                      icon: Icon(Icons.favorite_border, color: Colors.white),
+                      onPressed: () {},
                     ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_rounded))
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 220,
-                  width: 350,
-                  color: Colors.green,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90))),
-                      ),
+                  ),
+                  SizedBox(width: 8),
+                  CircleAvatar(
+                    backgroundColor: Color(0xFF00A36C),
+                    child: IconButton(
+                      icon: Icon(Icons.flag_outlined, color: Colors.white),
+                      onPressed: () {},
                     ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Harry Potter',
-                          style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(width: 16),
+                ],
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Freedom Fuel Filling Station',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            '★★★★☆   9/4/2024',
-                            style: TextStyle(color: Colors.black54),
-                          )),
-                    ])
-                  ],
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'This fuel station is great, The customer service wasgood, I feel like going there again to fuel my vehicle ifpossible, Highly recommending place, I don’t know why it has so low rating.',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Your Review ?',
-                          style: TextStyle(color: Color(0xFF00A36C)),
-                        ))),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Rating and Reviews',
-                        style: TextStyle(fontSize: 20),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(Icons.location_on,
+                              color: Color(0xFF00A36C), size: 16),
+                          SizedBox(width: 4),
+                          Text(
+                            'Kannur, Kerala',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_rounded))
-                  ],
-                ),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        height: 40,
-                        width: 40,
+                      SizedBox(height: 24),
+                      Container(
+                        padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90))),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Christopher',
-                          style: TextStyle(fontSize: 20),
+                          color: Color(0xFF00A36C).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'About',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'A modern fuel station offering premium quality gasoline and diesel, along with convenient amenities. Features state-of-the-art pumps, digital payment options, and professional service.',
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            '★★★★☆   9/4/2024',
-                            style: TextStyle(color: Colors.black54),
-                          )),
-                    ])
-                  ],
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'This fuel station is great, The customer service wasgood, I feel like going there again to fuel my vehicle ifpossible, Highly recommending place, I don’t know why it has so low rating.',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Your Review ?',
-                          style: TextStyle(color: Color(0xFF00A36C)),
-                        ))),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Rating and Reviews',
-                        style: TextStyle(fontSize: 20),
+                      SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Reviews',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.star, color: Colors.amber),
+                            label: Text(
+                              '4.5 (128 reviews)',
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_rounded))
-                  ],
+                      SizedBox(height: 16),
+                      _buildReviewCard('Lucy Guest', '9/4/2024'),
+                      _buildReviewCard('Harry Potter', '9/4/2024'),
+                      _buildReviewCard('Christopher', '9/4/2024'),
+                      SizedBox(height: 80), // Space for bottom buttons
+                    ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90))),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'John Gregory',
-                          style: TextStyle(fontSize: 20),
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, -4),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      },
+                      icon: Icon(Icons.directions, color: Color(0xFF00A36C)),
+                      label: Text('Directions'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF00A36C).withOpacity(0.1),
+                        foregroundColor: Color(0xFF00A36C),
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            '★★★★☆   9/4/2024',
-                            style: TextStyle(color: Colors.black54),
-                          )),
-                    ])
-                  ],
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'This fuel station is great, The customer service wasgood, I feel like going there again to fuel my vehicle ifpossible, Highly recommending place, I don’t know why it has so low rating.',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Your Review ?',
-                          style: TextStyle(color: Color(0xFF00A36C)),
-                        ))),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Rating and Reviews',
-                        style: TextStyle(fontSize: 20),
-                      ),
                     ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_rounded))
-                  ],
-                ),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90))),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Michael',
-                          style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SlotBookingScreen()),
+                        );
+                      },
+                      icon: Icon(Icons.calendar_today),
+                      label: Text('Book Now'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF00A36C),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            '★★★★☆   9/4/2024',
-                            style: TextStyle(color: Colors.black54),
-                          )),
-                    ])
-                  ],
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'This fuel station is great, The customer service wasgood, I feel like going there again to fuel my vehicle ifpossible, Highly recommending place, I don’t know why it has so low rating.',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Your Review ?',
-                          style: TextStyle(color: Color(0xFF00A36C)),
-                        ))),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Rating and Reviews',
-                        style: TextStyle(fontSize: 20),
-                      ),
                     ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_rounded))
-                  ],
-                ),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90))),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Mathew ',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            '★★★★☆   9/4/2024',
-                            style: TextStyle(color: Colors.black54),
-                          )),
-                    ])
-                  ],
-                ),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'This fuel station is great, The customer service wasgood, I feel like going there again to fuel my vehicle ifpossible, Highly recommending place, I don’t know why it has so low rating.',
-                      style: TextStyle(color: Color(0xFF989898)),
-                    )),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Edit Your Review ?',
-                          style: TextStyle(color: Color(0xFF00A36C)),
-                        ))),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Rating and Reviews',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_forward_rounded))
-                  ],
-                ),
-                SizedBox(
-                  height: 200,
-                ),
-                Row(
-                  children: [
-                    // ignore: prefer_const_constructors
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            minimumSize: const Size(150, 50.0),
-                            backgroundColor: Color(0xFFF3F3F3)),
-                        child: Text(
-                          'Direction',
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        )),
-                    SizedBox(
-                      width: 40,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FillingStationBooking()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            minimumSize: const Size(150, 50.0),
-                            backgroundColor: const Color(0xFF00A36C)),
-                        child: Text(
-                          'Book Now',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ))
-                  ],
-                )
-              ],
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
