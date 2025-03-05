@@ -1,6 +1,5 @@
-import 'package:cng_users/filling_station_booking.dart';
 import 'package:cng_users/filling_station_details.dart';
-import 'package:cng_users/screens/profile_screen.dart';
+import 'package:cng_users/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {

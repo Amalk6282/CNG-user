@@ -14,7 +14,7 @@ class _AppBootingPage1State extends State<AppBootingPage1> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds: 2), () {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => AppBootingPage2()),

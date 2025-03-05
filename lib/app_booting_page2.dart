@@ -1,5 +1,8 @@
-import 'package:cng_users/login_page.dart';
+import 'package:cng_users/features/signin/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'home_screen.dart';
 
 class AppBootingPage2 extends StatefulWidget {
   const AppBootingPage2({super.key});
@@ -9,6 +12,24 @@ class AppBootingPage2 extends StatefulWidget {
 }
 
 class _AppBootingPage2State extends State<AppBootingPage2> {
+  @override
+  void initState() {
+    Future.delayed(
+        const Duration(
+          milliseconds: 100,
+        ), () {
+      User? currentUser = Supabase.instance.client.auth.currentUser;
+      if (currentUser != null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

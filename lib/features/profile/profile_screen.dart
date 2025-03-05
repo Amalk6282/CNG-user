@@ -1,119 +1,304 @@
+import 'package:cng_users/app_booting_page1.dart';
 import 'package:cng_users/filling_station_booking.dart';
+import 'package:cng_users/util/check_login.dart';
+import 'package:cng_users/util/format_function.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CNG Booking App',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        brightness: Brightness.light,
-        fontFamily: 'Roboto',
-      ),
-      darkTheme: ThemeData(
-        primarySwatch: Colors.green,
-        brightness: Brightness.dark,
-        fontFamily: 'Roboto',
-      ),
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      home: const ProfileScreen(),
-    );
-  }
-}
+import '../../common_widgets.dart/custom_alert_dialog.dart';
+import 'profile_bloc/profile_bloc.dart';
 
 // Profile Screen
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final ProfileBloc _profileBloc = ProfileBloc();
+  Map _profile = {};
+
+  @override
+  void initState() {
+    getProfile();
+    checkLogin(context);
+    super.initState();
+  }
+
+  void getProfile() {
+    _profileBloc.add(GetAllProfileEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+    return BlocProvider.value(
+      value: _profileBloc,
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileFailureState) {
+            showDialog(
+              context: context,
+              builder: (context) => CustomAlertDialog(
+                title: 'Failure',
+                description: state.message,
+                primaryButton: 'Try Again',
+                onPrimaryPressed: () {
+                  getProfile();
+                  Navigator.pop(context);
+                },
               ),
+            );
+          } else if (state is ProfileGetSuccessState) {
+            _profile = state.profile;
+            setState(() {});
+          } else if (state is ProfileSuccessState) {
+            getProfile();
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: Colors.grey[50],
+            body: SafeArea(
               child: Column(
                 children: [
-                  const Text(
-                    "Profile",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen(),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                     child: Column(
                       children: [
-                        Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            CircleAvatar(
-                              radius: 40,
-                              backgroundColor: Colors.grey[300],
-                              backgroundImage: const NetworkImage(
-                                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
                         const Text(
-                          "Lucy Guest",
+                          "Profile",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          "lucyguest1234@gmail.com",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
+                        const SizedBox(height: 20),
+                        InkWell(
+                          onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const EditProfileScreen(),
+                            //   ),
+                            // );
+                          },
+                          child: Column(
+                            children: [
+                              Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: Colors.grey[300],
+                                    backgroundImage: const NetworkImage(
+                                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.green,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                formatValue(_profile['name']),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formatValue(_profile['phone']),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formatValue(_profile['email']),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      children: [
+                        // MenuTile(
+                        //   icon: Icons.directions_car,
+                        //   title: "My Vehicle",
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const MyVehicleScreen(),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // MenuTile(
+                        //   icon: Icons.account_balance_wallet,
+                        //   title: "Route Credit Wallet",
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const WalletScreen(),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // MenuTile(
+                        //   icon: Icons.calendar_month,
+                        //   title: "Book CNG Slot",
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const SlotBookingScreen(),
+                        //       ),
+                        //     );
+                        //   },
+                        //   isHighlighted: true,
+                        // ),
+                        // MenuTile(
+                        //   icon: Icons.history,
+                        //   title: "Booking History",
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const BookingHistoryScreen(),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // MenuTile(
+                        //     icon: Icons.lock,
+                        //     title: "Change Password",
+                        //     onTap: () {
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(
+                        //             builder: (context) => const ChangePasswordScreen(),
+                        //           ),
+                        //         );
+                        //     }),
+                        // MenuTile(
+                        //   icon: Icons.help_outline,
+                        //   title: "Help and Support",
+                        //   onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const HelpSupportScreen(),
+                        //   ),
+                        // );
+                        //   },
+                        // ),
+                        // MenuTile(
+                        //   icon: Icons.delete_outline,
+                        //   title: "Delete Account",
+                        //   onTap: () {
+                        //     showDialog(
+                        //       context: context,
+                        //       builder: (BuildContext context) {
+                        //         return AlertDialog(
+                        //           title: const Text('Delete Account'),
+                        //           content: const Text(
+                        //               'Are you sure you want to delete your account? This action cannot be undone.'),
+                        //           actions: [
+                        //             TextButton(
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop();
+                        //               },
+                        //               child: const Text('Cancel'),
+                        //             ),
+                        //             TextButton(
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop();
+                        //                 // Show confirmation and logout
+                        //                 ScaffoldMessenger.of(context).showSnackBar(
+                        //                   const SnackBar(
+                        //                     content:
+                        //                         Text('Account deleted successfully'),
+                        //                     backgroundColor: Colors.red,
+                        //                   ),
+                        //                 );
+                        //               },
+                        //               child: const Text(
+                        //                 'Delete',
+                        //                 style: TextStyle(color: Colors.red),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         );
+                        //       },
+                        //     );
+                        //   },
+                        //   isDestructive: true,
+                        // ),
+                        MenuTile(
+                          icon: Icons.logout,
+                          title: "Sign Out",
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CustomAlertDialog(
+                                title: "SIGN OUT",
+                                content: const Text(
+                                  "Are you sure you want to Sign Out? Clicking 'Sign Out' will end your current session and require you to sign in again to access your account.",
+                                ),
+                                primaryButton: "SIGN OUT",
+                                onPrimaryPressed: () {
+                                  Supabase.instance.client.auth.signOut();
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AppBootingPage1(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -121,167 +306,8 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                children: [
-                  MenuTile(
-                    icon: Icons.directions_car,
-                    title: "My Vehicle",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyVehicleScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  MenuTile(
-                    icon: Icons.account_balance_wallet,
-                    title: "Route Credit Wallet",
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const WalletScreen(),
-                      //   ),
-                      // );
-                    },
-                  ),
-                  MenuTile(
-                    icon: Icons.calendar_month,
-                    title: "Book CNG Slot",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SlotBookingScreen(),
-                        ),
-                      );
-                    },
-                    isHighlighted: true,
-                  ),
-                  MenuTile(
-                    icon: Icons.history,
-                    title: "Booking History",
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const BookingHistoryScreen(),
-                      //   ),
-                      // );
-                    },
-                  ),
-                  MenuTile(
-                      icon: Icons.lock,
-                      title: "Change Password",
-                      onTap: () {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => const ChangePasswordScreen(),
-                        //     ),
-                        //   );
-                      }),
-                  MenuTile(
-                    icon: Icons.help_outline,
-                    title: "Help and Support",
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const HelpSupportScreen(),
-                      //   ),
-                      // );
-                    },
-                  ),
-                  MenuTile(
-                    icon: Icons.delete_outline,
-                    title: "Delete Account",
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Delete Account'),
-                            content: const Text(
-                                'Are you sure you want to delete your account? This action cannot be undone.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  // Show confirmation and logout
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Account deleted successfully'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Delete',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    isDestructive: true,
-                  ),
-                  MenuTile(
-                    icon: Icons.logout,
-                    title: "Log Out",
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Log Out'),
-                            content:
-                                const Text('Are you sure you want to log out?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  // Show login screen in real app
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Logged out successfully'),
-                                    ),
-                                  );
-                                },
-                                child: const Text('Log Out'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

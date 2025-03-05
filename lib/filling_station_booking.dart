@@ -1,5 +1,4 @@
-import 'package:cng_users/screens/booking_confirmation_screen.dart';
-import 'package:cng_users/screens/profile_screen.dart';
+import 'package:cng_users/features/booking_confirmation_screen.dart';
 import 'package:flutter/material.dart';
 
 class SlotBookingScreen extends StatefulWidget {
