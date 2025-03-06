@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage>
                                   borderSide:
                                       BorderSide(color: Color(0xFF00A36C)),
                                 ),
-                                prefixIcon: Icon(Icons.email_outlined,
+                                prefixIcon: Icon(Icons.lock_outlined,
                                     color: Colors.grey),
                               ),
                             ),

@@ -1,3 +1,4 @@
+import 'package:cng_users/features/filling_stations/filling_stations_screen.dart';
 import 'package:cng_users/filling_station_details.dart';
 import 'package:cng_users/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,27 +30,9 @@ class _HomeScreenState extends State<HomeScreen>
         body: TabBarView(
           controller: _tabController,
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      labelText: 'Search',
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            FillingStationsScreen(),
             Container(
               color: Colors.red,
-              child: FillingStationDetails(),
             ),
             Container(color: Colors.green),
             ProfileScreen()

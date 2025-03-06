@@ -170,7 +170,7 @@ class _SignupScreenState extends State<SignupScreen>
                                   borderSide:
                                       BorderSide(color: Color(0xFF00A36C)),
                                 ),
-                                prefixIcon: Icon(Icons.email_outlined,
+                                prefixIcon: Icon(Icons.person_outline,
                                     color: Colors.grey),
                               ),
                             ),
@@ -197,7 +197,7 @@ class _SignupScreenState extends State<SignupScreen>
                                   borderSide:
                                       BorderSide(color: Color(0xFF00A36C)),
                                 ),
-                                prefixIcon: Icon(Icons.email_outlined,
+                                prefixIcon: Icon(Icons.phone_outlined,
                                     color: Colors.grey),
                               ),
                             ),
@@ -265,7 +265,7 @@ class _SignupScreenState extends State<SignupScreen>
                                   borderSide:
                                       BorderSide(color: Color(0xFF00A36C)),
                                 ),
-                                prefixIcon: Icon(Icons.email_outlined,
+                                prefixIcon: Icon(Icons.lock_outline,
                                     color: Colors.grey),
                               ),
                             ),
