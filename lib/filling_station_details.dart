@@ -1,3 +1,4 @@
+import 'package:cng_users/features/book_now_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -251,10 +252,12 @@ With an expanding nationwide refueling infrastructure and government incentives 
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SlotBookingScreen()),
+                        showDialog(
+                          context: context,
+                          builder: (context) => BookNowDialog(
+                            fillingStationUserId:
+                                widget.stationDetails['user_id'],
+                          ),
                         );
                       },
                       icon: Icon(Icons.calendar_today),

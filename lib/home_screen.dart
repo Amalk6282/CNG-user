@@ -1,3 +1,4 @@
+import 'package:cng_users/features/booking_history_screen.dart';
 import 'package:cng_users/features/filling_stations/favourite_filling_stations_screen.dart';
 import 'package:cng_users/features/filling_stations/filling_stations_screen.dart';
 import 'package:cng_users/filling_station_details.dart';
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             FillingStationsScreen(),
             FavouriteFillingStationsScreen(),
-            Container(color: Colors.green),
+            BookingHistoryScreen(),
             ProfileScreen()
           ],
         ),
@@ -62,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 BottomNavbarItem(
                   isActive: _tabController.index == 2,
-                  label: 'Route',
-                  iconData: Icons.add_road,
+                  label: 'Bookings',
+                  iconData: Icons.bookmark_border,
                   onTap: () {
                     _tabController.animateTo(2);
                   },
