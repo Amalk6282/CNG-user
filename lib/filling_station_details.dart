@@ -781,13 +781,13 @@ class _FillingStationFavoriteState extends State<FillingStationFavorite> {
     final stationId = widget.stationId;
 
     if (userId != null && stationId != null) {
-      final response = await Supabase.instance.client
-          .from('customer_favourite_stations')
-          .delete()
-          .eq('customer_user_id', userId)
-          .eq('filling_station_user_id', stationId);
+      try {
+        final response = await Supabase.instance.client
+            .from('customer_favourite_stations')
+            .delete()
+            .eq('customer_user_id', userId)
+            .eq('filling_station_user_id', stationId);
 
-      if (response.error == null) {
         setState(() {
           isFavorited = false;
         });
@@ -796,11 +796,10 @@ class _FillingStationFavoriteState extends State<FillingStationFavorite> {
             content: Text('Removed from favorites!'),
           ),
         );
-      } else {
+      } catch (e, s) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Failed to remove from favorites: ${response.error!.message}'),
+            content: Text('Failed to remove from favorites: $e'),
           ),
         );
       }

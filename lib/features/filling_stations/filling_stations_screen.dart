@@ -49,9 +49,9 @@ class _FillingStationsScreenState extends State<FillingStationsScreen> {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(stationsState.message)));
           }
-          if (stationsState is FillingStationsGetSuccessState) {
-            log('${stationsState.fillingstations.first}');
-          }
+          // if (stationsState is FillingStationsGetSuccessState) {
+          //   log('${stationsState.fillingstations.first}');
+          // }
         },
         builder: (context, stationsState) {
           return ListView(
@@ -112,14 +112,18 @@ class _FillingStationsScreenState extends State<FillingStationsScreen> {
                   itemBuilder: (context, index) {
                     final station = stationsState.fillingstations[index];
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
+                      onTap: () async {
+                        await Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => FillingStationDetails(
                               stationDetails: station,
                             ),
                           ),
                         );
+
+                        _fillingStationsBloc.add(GetAllFillingStationsEvent(
+                          params: {},
+                        ));
                       },
                       child: Card(
                         elevation: 2,

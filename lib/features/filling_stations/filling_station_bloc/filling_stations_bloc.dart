@@ -22,6 +22,12 @@ class FillingStationsBloc
           PostgrestFilterBuilder<List<Map<String, dynamic>>> query =
               table.select('*');
 
+          if (event.params['favourite'] != null && event.params['favourite']) {
+            query = table.select('*, customer_favourite_stations!inner(*)').eq(
+                'customer_favourite_stations.customer_user_id',
+                Supabase.instance.client.auth.currentUser!.id);
+          }
+
           if (event.params['query'] != null) {
             String qString = event.params['query'].toString();
             query = query.or(

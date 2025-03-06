@@ -1,3 +1,4 @@
+import 'package:cng_users/features/filling_stations/favourite_filling_stations_screen.dart';
 import 'package:cng_users/features/filling_stations/filling_stations_screen.dart';
 import 'package:cng_users/filling_station_details.dart';
 import 'package:cng_users/features/profile/profile_screen.dart';
@@ -31,9 +32,7 @@ class _HomeScreenState extends State<HomeScreen>
           controller: _tabController,
           children: [
             FillingStationsScreen(),
-            Container(
-              color: Colors.red,
-            ),
+            FavouriteFillingStationsScreen(),
             Container(color: Colors.green),
             ProfileScreen()
           ],
