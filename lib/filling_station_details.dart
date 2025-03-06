@@ -683,7 +683,7 @@ void showReportIssueDialog(BuildContext context, String filingStationUserId) {
                 await Supabase.instance.client.from('reports').insert({
                   'report': _issueController.text,
                   'user_id': Supabase.instance.client.auth.currentUser?.id,
-                  'filings_station_user_id': filingStationUserId,
+                  'filling_station_user_id': filingStationUserId,
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
