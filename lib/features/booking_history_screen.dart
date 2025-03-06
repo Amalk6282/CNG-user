@@ -36,7 +36,7 @@ class BookingHistoryScreen extends StatelessWidget {
                 return const Center(child: Text('No bookings found'));
               }
               List<Map<String, dynamic>> bookings = snapshot.data!;
-              log(bookings.first.toString());
+              // log(bookings.first.toString());
               return ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
